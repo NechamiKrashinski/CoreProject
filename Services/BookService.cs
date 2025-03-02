@@ -1,15 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
 
-
+using project.Interfaces;
 using project.Models;
 
 namespace project.Services;
 
-public static class BookService 
+public class BookServiceConst : IBookService
 {
     private static List<Book> listBooks;
 
-    static BookService()
+    public BookServiceConst ()
     {
         listBooks = new List<Book>{
             new Book {Id=1, Name = "איסתרק", Auther = "מיה קינן", Price = 70, Date= DateOnly.FromDateTime(DateTime.Now.AddYears(-2)) },
@@ -17,16 +17,16 @@ public static class BookService
         };
     }
 
-    public static List<Book> Get(){
+    public  List<Book> Get(){
         return listBooks;
     }
 
-     public static Book Get(int id){
+     public  Book Get(int id){
         var book= listBooks.FirstOrDefault(b=> b.Id==id);
         return book;
     }
 
-    public static int Insert(Book newBook)
+    public  int Insert(Book newBook)
     {
         if(newBook == null ||  String.IsNullOrWhiteSpace(newBook.Name) || newBook.Price <=0 )
             return-1;
@@ -38,7 +38,7 @@ public static class BookService
        
     }
 
-    public static bool Update(int id ,Book book)
+    public bool Update(int id ,Book book)
     {
         if(book == null || book.Id!=id|| string.IsNullOrWhiteSpace(book.Name) || book.Price <=0)
             return false;
@@ -52,7 +52,7 @@ public static class BookService
         return true;
     }
 
-    public static bool Delete(int id)
+    public bool Delete(int id)
     {
         var currentBook= listBooks.FirstOrDefault(b=> b.Id==id);
         if(currentBook == null)
@@ -63,4 +63,12 @@ public static class BookService
         return true;
     }
 
+}
+
+public static class BookUtilities
+{
+    public static void AddBookConst(this IServiceCollection services)
+    {
+        services.AddSingleton<IBookService,BookServiceConst>();
+    }
 }

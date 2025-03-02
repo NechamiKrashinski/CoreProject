@@ -1,5 +1,5 @@
-using Microsoft.OpenApi.Models;
-namespace project;
+
+namespace project.Models;
 
 
 public class Book
